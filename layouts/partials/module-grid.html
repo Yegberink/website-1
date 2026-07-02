@@ -1,0 +1,25 @@
+<ul class="module-grid">
+    {{ range . }}
+    <li>
+        <a class="card" href="{{ .RelPermalink }}">
+            <h3>{{ .Title }}</h3>
+            <p class="summary">{{ .Params.summary }}</p>
+            <span class="card-meta">
+                <span class="badge badge-{{ .Params.tier }}"
+                    >{{ .Params.tier }}</span
+                >
+                {{ if .Params.convention_major }}{{ partial
+                "convention-pill.html" (dict "major" .Params.convention_major
+                "version" .Params.convention_version) }}{{ end }} {{ if
+                .Params.version }}<span class="kv kv-version"
+                    ><span class="kv-key">release</span
+                    ><span class="kv-val">{{ .Params.version }}</span></span
+                >{{ else }}<span class="kv kv-unreleased"
+                    ><span class="kv-key">release</span
+                    ><span class="kv-val">unreleased</span></span
+                >{{ end }}
+            </span>
+        </a>
+    </li>
+    {{ end }}
+</ul>

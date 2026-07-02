@@ -1,0 +1,91 @@
+{{ define "main" }}
+<section class="module">
+  <header class="module-header">
+    <h1>{{ .Title }}</h1>
+    <p class="summary">{{ .Params.summary }}</p>
+
+    {{ if eq .Params.tier "community" }}
+      <p class="badge badge-community"
+         title="Contributed by the community; not vetted by modelblocks-org">
+        community module
+      </p>
+    {{ end }}
+
+    <dl class="meta">
+      {{ with .Params.license }}<dt>License</dt><dd>{{ . }}</dd>{{ end }}
+      {{ with .Params.authors }}<dt>Authors</dt><dd>{{ delimit . ", " }}</dd>{{ end }}
+      {{ with .Params.version }}
+        <dt>Version</dt>
+        <dd>
+          <a href="{{ $.Params.version_url }}" rel="nofollow noopener noreferrer ugc">{{ . }}</a>
+          <code>@ {{ substr $.Params.sha 0 7 }}</code>
+        </dd>
+      {{ else }}
+        <dt>Version</dt>
+        <dd>tracking <code>{{ .Params.ref }}</code> <code>@ {{ substr .Params.sha 0 7 }}</code></dd>
+      {{ end }}
+      <dt>Repository</dt>
+      <dd>
+        <a href="{{ .Params.repo }}" rel="nofollow noopener noreferrer ugc">{{ .Params.repo }}</a>
+      </dd>
+    </dl>
+  </header>
+
+  {{/* Pre-sanitised HTML from the ingest. The .readme wrapper is
+       cosmetic containment only (clamp image width, wrap long code). */}}
+  <section class="readme">
+    {{ .Content }}
+  </section>
+
+  {{ with .Params.contributors }}
+  <section class="interface">
+    <h2>Contributors</h2>
+    <ul class="contributor-grid compact">
+      {{ range . }}
+      <li class="contributor">
+        <a class="contributor-id" href="{{ .profile | default (printf "https://github.com/%s" .login) }}"
+           rel="nofollow noopener noreferrer ugc">
+          {{ with .avatar_url }}<img class="avatar" src="{{ . }}" alt="" loading="lazy" width="48" height="48">{{ end }}
+          <span class="contributor-name">{{ .name }}</span>
+        </a>
+        {{ partial "contribution-chips.html" .contributions }}
+      </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.pathvars }}
+  <section class="interface">
+    <h2>Paths</h2>
+    {{ range $group, $vars := . }}
+    <div class="pathvar-group">
+      <h3>{{ $group }}</h3>
+      <dl class="pathvars">
+        {{ range $name, $v := $vars }}
+        <dt><code>{{ $name }}</code></dt>
+        <dd>
+          <code class="path-default">{{ $v.default_html | safeHTML }}</code>
+          {{ with $v.description }}<span class="path-desc">{{ . }}</span>{{ end }}
+        </dd>
+        {{ end }}
+      </dl>
+    </div>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ with .Params.wildcards }}
+  <section class="interface">
+    <h2>Wildcards</h2>
+    <dl class="wildcards">
+      {{ range $name, $desc := . }}
+      <dt><code>{{ $name }}</code></dt>
+      <dd>{{ $desc }}</dd>
+      {{ end }}
+    </dl>
+  </section>
+  {{ end }}
+
+</section>
+{{ end }}

@@ -1,0 +1,13 @@
+##
+# Community modules
+# Lenient validation: invalid module = module skipped and reported
+#
+# Each entry is minimally the module's repo URL.
+# For a non-default branch or a module in a subdir,
+# use an inline table instead of a bare string:
+#   { repo = "https://github.com/org/module_foo", ref = "dev", subdir = "pkg" }
+##
+
+modules = [
+  # "https://github.com/some-user/module_example_community",
+]

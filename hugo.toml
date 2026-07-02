@@ -1,0 +1,48 @@
+baseURL = "https://www.modelblocks.org/"
+locale = "en-us"
+title = "Modelblocks"
+
+# Modules carry no tags/categories, so drop Hugo's default taxonomy pages.
+disableKinds = ['taxonomy', 'term']
+
+[params]
+docs_url = "https://modelblocks.readthedocs.io/"
+zulip_url = "https://calliope-modelblocks.zulipchat.com/"
+github_url = "https://github.com/modelblocks-org"
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 10
+
+[[menu.main]]
+name = "Convention"
+url = "/convention/"
+weight = 20
+
+[[menu.main]]
+name = "Module directory"
+url = "/modules/"
+weight = 30
+
+[[menu.main]]
+name = "Contributors"
+url = "/contributors/"
+weight = 40
+
+[[menu.main]]
+name = "Get involved"
+url = "/get-involved/"
+weight = 50
+
+[markup.goldmark.renderer]
+unsafe = false
+
+[markup.highlight]
+noClasses = false
+
+# The module content adapter injects each page body as text/html. That HTML is
+# pre-sanitised by the Python ingest (nh3), so this is the intended trust path.
+# Hugo >= 0.146 blocks text/html content by default, so we re-allow it here.
+[security]
+allowContent = ['^text/markdown$', '^text/html$']

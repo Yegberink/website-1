@@ -1,0 +1,420 @@
+:root {
+    /* Tint Pico's primary (links, focus rings) with the ModelBlocks purple. */
+    --pico-primary: #7a4dd6;
+    --pico-primary-hover: #6a3dc6;
+    --pico-primary-focus: rgba(122, 77, 214, 0.3);
+    --pico-primary-underline: rgba(122, 77, 214, 0.5);
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --pico-primary: #b69bf0;
+        --pico-primary-hover: #c8b4f5;
+        --pico-primary-focus: rgba(182, 155, 240, 0.3);
+        --pico-primary-underline: rgba(182, 155, 240, 0.5);
+    }
+}
+
+:root {
+    --pico-font-size: 83.5%;
+}
+@media (min-width: 576px) {
+    :root {
+        --pico-font-size: 88.5%;
+    }
+}
+@media (min-width: 768px) {
+    :root {
+        --pico-font-size: 94%;
+    }
+}
+@media (min-width: 1024px) {
+    :root {
+        --pico-font-size: 99%;
+    }
+}
+@media (min-width: 1280px) {
+    :root {
+        --pico-font-size: 104%;
+    }
+}
+@media (min-width: 1536px) {
+    :root {
+        --pico-font-size: 109.5%;
+    }
+}
+
+h1 {
+    --pico-font-size: 1.55rem;
+}
+h2 {
+    --pico-font-size: 1.25rem;
+}
+h3 {
+    --pico-font-size: 1.05rem;
+}
+
+/* --- header / footer --- */
+.site-header {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--pico-muted-border-color);
+}
+.site-header .brand {
+    font-weight: 700;
+    text-decoration: none;
+    margin-right: auto;
+    color: var(--pico-color);
+}
+.site-header nav {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.site-header nav a {
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--pico-border-radius);
+}
+.site-header nav a[aria-current="page"] {
+    background: rgba(128, 128, 128, 0.18);
+}
+.site-footer {
+    border-top: 1px solid var(--pico-muted-border-color);
+    color: var(--pico-muted-color);
+    font-size: 0.9rem;
+}
+
+/* --- landing-page boxes --- */
+.box-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-top: 2rem;
+}
+.box {
+    position: relative;
+    display: block;
+    padding: 1.25rem 1.25rem 2.5rem;
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: var(--pico-border-radius);
+    background: var(--pico-card-background-color);
+    text-decoration: none;
+    color: var(--pico-color);
+    transition:
+        transform 0.12s ease,
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+}
+.box:hover {
+    transform: translateY(-2px);
+    border-color: var(--pico-primary);
+    box-shadow: var(--pico-card-box-shadow);
+}
+.box-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+.box .icon {
+    display: inline-flex;
+    color: var(--pico-primary);
+}
+.box .icon svg {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+.box h3 {
+    margin: 0;
+}
+.box p {
+    margin: 0;
+    color: var(--pico-muted-color);
+}
+.box-arrow {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1rem;
+    color: var(--pico-primary);
+    font-size: 1.2rem;
+}
+
+/* --- module directory grid --- */
+.module-grid {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.module-grid > li {
+    list-style: none;
+    margin: 0;
+} /* beats Pico's `ul li{list-style:square}` */
+.module-grid .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: var(--pico-border-radius);
+    background: var(--pico-card-background-color);
+    text-decoration: none;
+    color: var(--pico-color);
+    transition:
+        transform 0.12s ease,
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+}
+.module-grid .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--pico-primary);
+    box-shadow: var(--pico-card-box-shadow);
+}
+.module-grid .card h3 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+.module-grid .card .summary {
+    margin: 0;
+    flex: 1;
+    color: var(--pico-muted-color);
+    font-size: 0.9rem;
+}
+.module-grid .card .card-meta {
+    display: flex;
+    flex-wrap: wrap; /* allow pills to break onto multiple lines as they widen */
+    align-items: center;
+    gap: 0.4rem; /* also acts as row-gap between wrapped lines */
+    margin-top: 0.25rem;
+}
+
+/* --- tier pills --- */
+.badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.5; /* match .kv pill height */
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+}
+.badge-core,
+.badge-community {
+    text-transform: capitalize;
+} /* Core / Community, not core / CORE */
+.badge-core {
+    background: #ede7fb;
+    color: #5a32b0;
+}
+.badge-community {
+    background: #fff3e0;
+    color: #8a5a00;
+}
+
+/* --- two-tone key→value pills (directory cards) --- */
+.kv {
+    display: inline-flex;
+    align-items: stretch;
+    border-radius: 999px;
+    overflow: hidden; /* clip segment corners to the pill radius */
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+.kv-key,
+.kv-val {
+    padding: 0.12rem 0.55rem;
+}
+.kv-key {
+    color: #fff;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+}
+.kv-val {
+    font-variant-numeric: tabular-nums;
+}
+
+.kv-convention .kv-key {
+    background: #0f766e;
+} /* teal */
+.kv-convention .kv-val {
+    background: #e6f7f0;
+    color: #0f766e;
+}
+.kv-version .kv-key {
+    background: #1d4ed8;
+} /* blue */
+.kv-version .kv-val {
+    background: #e6f0ff;
+    color: #1d4ed8;
+}
+.kv-unreleased .kv-key {
+    background: #6b7280;
+} /* muted grey */
+.kv-unreleased .kv-val {
+    background: #f1f2f4;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* --- module detail: metadata + interface --- */
+dl.meta {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 1rem;
+}
+dl.meta dt {
+    color: var(--pico-muted-color);
+}
+
+.interface {
+    font-size: 0.8rem; /* the path/wildcard boxes are denser than body text */
+    background: var(--pico-card-background-color);
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: var(--pico-border-radius);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+}
+.interface > h2 {
+    margin-top: 0;
+    font-size: 1rem;
+}
+.interface h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--pico-muted-color);
+}
+.pathvar-group + .pathvar-group {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--pico-muted-border-color);
+}
+.interface dl.pathvars,
+.interface dl.wildcards {
+    display: grid;
+    grid-template-columns: minmax(8rem, max-content) 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0;
+}
+.interface dt {
+    font-weight: 600;
+}
+.interface dd {
+    margin: 0;
+}
+.interface .path-desc {
+    display: block;
+    color: var(--pico-muted-color);
+}
+
+/* Wildcard tokens highlighted inside path templates; `title` shows the
+   description on hover (built in ingest/render.py). */
+.interface .path-default .wc {
+    background: var(--pico-primary-focus);
+    color: var(--pico-primary);
+    border-radius: 4px;
+    padding: 0 0.2em;
+    cursor: help;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+}
+
+/* --- cosmetic containment for sanitised README HTML --- */
+.readme img {
+    max-width: min(100%, 490px);
+    height: auto;
+}
+/* Centre a hero image that's alone in its paragraph (READMEs use <p><img></p>;
+   the presentational align="center" is stripped by the sanitiser). */
+.readme p > img:only-child {
+    display: block;
+    margin-inline: auto;
+}
+.readme p:has(> img:only-child) {
+    text-align: center;
+}
+
+/* --- contributors --- */
+.contributor-grid {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+.contributor-grid.compact {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+.contributor-grid > li {
+    list-style: none;
+    margin: 0;
+}
+.contributor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-align: center;
+    height: 100%;
+    padding: 1rem 0.75rem;
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: var(--pico-border-radius);
+    background: var(--pico-card-background-color);
+}
+.contributor-id {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: var(--pico-color);
+}
+.avatar {
+    border-radius: 50%;
+}
+.contributor-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    justify-content: center;
+}
+.chip {
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: help;
+}
+.contributor-modules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    justify-content: center;
+    margin: 0;
+}
+.module-pill {
+    font-size: 0.68rem;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--pico-muted-border-color);
+    text-decoration: none;
+    color: var(--pico-muted-color);
+}
+.module-pill:hover {
+    border-color: var(--pico-primary);
+    color: var(--pico-primary);
+}
+.module-pill.tool::after {
+    content: " \2197";
+    font-size: 0.85em;
+} /* external ↗ */

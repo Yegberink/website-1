@@ -1,0 +1,12 @@
+{{- $href := .Get "href" -}}
+{{- with .Get "param" }}{{ $href = index site.Params . }}{{ end -}}
+{{- with $href -}}
+<a class="box" href="{{ . }}">
+  <span class="box-head">
+    {{ with $.Get "icon" }}{{ partial "icon.html" . }}{{ end }}
+    <h3>{{ $.Get "title" }}</h3>
+  </span>
+  <p>{{ $.Inner | strings.TrimSpace }}</p>
+  <span class="box-arrow" aria-hidden="true">&rarr;</span>
+</a>
+{{- end -}}

@@ -1,0 +1,42 @@
+{{/*
+  content/modules/_content.gotmpl  — Hugo content adapter (needs Hugo >= 0.126.0)
+
+  Generates one page per module from data/modules.json (written by the Python
+  ingest). The page body is the extended description (README intro), ALREADY
+  rendered to safe HTML by the ingest, so we inject it via content.mediaType
+  "text/html": Hugo serves it verbatim and never runs untrusted content through
+  goldmark. There is no goldmark "unsafe" anywhere.
+
+  `path` is relative to this adapter's section (content/modules/), so a bare id
+  yields the URL /modules/<id>/.
+*/}}
+{{ range $id, $m := hugo.Data.modules }}
+  {{ $content := dict
+      "mediaType" "text/html"
+      "value"     $m.description_html
+  }}
+  {{ $page := dict
+      "kind"    "page"
+      "path"    $id
+      "title"   $m.name
+      "date"    $m.updated
+      "content" $content
+      "params"  (dict
+        "summary"   $m.summary
+        "license"   $m.license
+        "authors"   $m.authors
+        "pathvars"     $m.pathvars
+        "wildcards"    $m.wildcards
+        "convention_version" $m.convention_version
+        "convention_major"   $m.convention_major
+        "contributors" $m.contributors
+        "tier"      $m.tier
+        "repo"      $m.repo
+        "sha"       $m.sha
+        "version"     $m.version
+        "version_url" $m.version_url
+        "ref"         $m.ref
+      )
+  }}
+  {{ $.AddPage $page }}
+{{ end }}

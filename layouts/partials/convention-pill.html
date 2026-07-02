@@ -1,0 +1,6 @@
+{{- $major := .major -}} {{- $title := .version | default (printf "v%v" $major)
+-}}
+<span class="kv kv-convention" title="Modelblocks convention {{ $title }}"
+    ><span class="kv-key">convention</span
+    ><span class="kv-val">v{{ $major }}</span></span
+>{{- "" -}}

@@ -1,0 +1,19 @@
+{{- /* Render all-contributors contribution keywords as emoji chips.
+       Call: {{ partial "contribution-chips.html" .contributions }}
+       Unknown keywords are skipped. */ -}}
+{{- $emoji := dict
+  "a11y" "♿️" "audio" "🔊" "blog" "📝" "bug" "🐛" "business" "💼"
+  "code" "💻" "content" "🖋️" "data" "🔣" "design" "🎨" "doc" "📖"
+  "example" "💡" "eventOrganizing" "📋" "financial" "💵" "fundingFinding" "🔍"
+  "ideas" "🤔" "infra" "🚇" "maintenance" "🚧" "mentoring" "🧑‍🏫"
+  "platform" "📦" "plugin" "🔌" "projectManagement" "📆" "promotion" "📣"
+  "question" "💬" "research" "🔬" "review" "👀" "security" "🛡️"
+  "talk" "📢" "test" "⚠️" "tool" "🔧" "translation" "🌍" "tutorial" "✅"
+  "userTesting" "📓" "video" "📹" -}}
+{{- with . -}}
+<span class="chips">
+{{- range $c := . -}}
+{{- with index $emoji $c -}}<span class="chip" title="{{ $c }}">{{ . }}</span>{{- end -}}
+{{- end -}}
+</span>
+{{- end -}}

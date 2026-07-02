@@ -1,0 +1,30 @@
+##
+# Core modules
+# Strict validation: invalid module = build failure
+#
+# Each entry is minimally the module's repo URL.
+# For a non-default branch or a module in a subdir,
+# use an inline table instead of a bare string:
+#   { repo = "https://github.com/org/module_foo", ref = "dev", subdir = "pkg" }
+##
+
+modules = [
+  "https://github.com/modelblocks-org/module_geo_boundaries",
+  "https://github.com/modelblocks-org/module_powerplants",
+  "https://github.com/modelblocks-org/module_area_potentials",
+  "https://github.com/modelblocks-org/module_hydropower",
+]
+
+##
+# Core tool repositories
+#
+# These are not shown in the module directory grid, but their
+# contributors count toward the project-wide contributors page.
+# Same entry format as `modules` (URL string or inline table).
+##
+
+tools = [
+  "https://github.com/modelblocks-org/gregor",
+  "https://github.com/modelblocks-org/data-module-template",
+  "https://github.com/modelblocks-org/docs",
+]

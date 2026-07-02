@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale | default "en" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &middot; {{ .Site.Title }}{{ end }}</title>
+  <link rel="stylesheet" href="/css/pico.classless.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/highlight.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">{{ .Site.Title }}</a>
+    <nav>
+      {{ range .Site.Menus.main }}
+      {{ $current := or (eq $.RelPermalink .URL) (and (ne .URL "/") (hasPrefix $.RelPermalink .URL)) }}
+      <a href="{{ .URL }}"{{ if $current }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+    </nav>
+  </header>
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    <p>
+      <a href="/contributors/">Contributors</a>
+      {{ with .Site.Params.zulip_url }}&middot; <a href="{{ . }}" rel="noopener">Chat on Zulip</a>{{ end }}
+    </p>
+  </footer>
+</body>
+</html>

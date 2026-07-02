@@ -1,0 +1,10 @@
+{{- $key := .Get 0 -}}
+{{- if eq $key "convention" -}}
+  {{- $major := .Get 1 -}}
+  {{- if not $major }}{{ errorf "{{< badge convention N >}} needs a version, e.g. {{< badge convention 1 >}} (%s)" .Position }}{{ end -}}
+  {{- partial "convention-pill.html" (dict "major" $major) -}}
+{{- else -}}
+  {{- $label := $key -}}
+  {{- with .Get 1 }}{{ $label = . }}{{ end -}}
+  <span class="badge badge-{{ $key }}">{{ $label }}</span>
+{{- end -}}

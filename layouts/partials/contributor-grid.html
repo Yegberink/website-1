@@ -1,0 +1,22 @@
+{{ with hugo.Data.contributors }}
+<ul class="contributor-grid">
+  {{ range . }}
+  <li class="contributor">
+    <a class="contributor-id" href="{{ .profile | default (printf "https://github.com/%s" .login) }}"
+       rel="nofollow noopener noreferrer ugc">
+      {{ with .avatar_url }}<img class="avatar" src="{{ . }}" alt="" loading="lazy" width="64" height="64">{{ end }}
+      <span class="contributor-name">{{ .name }}</span>
+    </a>
+    {{ partial "contribution-chips.html" .contributions }}
+    {{ if or .modules .tools }}
+    <p class="contributor-modules">
+      {{ range .modules }}<a class="module-pill" href="/modules/{{ . }}/">{{ . }}</a>{{ end }}
+      {{ range .tools }}<a class="module-pill tool" href="{{ .url }}" rel="noopener">{{ .name }}</a>{{ end }}
+    </p>
+    {{ end }}
+  </li>
+  {{ end }}
+</ul>
+{{ else }}
+<p>No contributors recorded yet.</p>
+{{ end }}
