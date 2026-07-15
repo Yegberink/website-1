@@ -16,6 +16,7 @@ metadata come from the .copier-answers.yml fetched from that repo. The catalog
 files are TRUSTED (reviewed), but we still shape-validate each entry with
 CatalogEntry so a typo can't break the build or smuggle a bad URL into fetch.
 """
+
 from __future__ import annotations
 
 import tomllib
@@ -59,15 +60,17 @@ def read_catalog(catalog_files: dict[str, Path]) -> dict[str, list[dict]]:
             raise ValueError(f"duplicate catalog entry: {key}")
         seen.add(key)
         owner, name = parse_repo_url(str(entry.repo))
-        dest.append({
-            "repo": str(entry.repo),
-            "ref": entry.ref,
-            "subdir": entry.subdir,
-            "tier": entry.tier,
-            "owner": owner,
-            "name": name,
-            "work_in_progress": entry.work_in_progress,
-        })
+        dest.append(
+            {
+                "repo": str(entry.repo),
+                "ref": entry.ref,
+                "subdir": entry.subdir,
+                "tier": entry.tier,
+                "owner": owner,
+                "name": name,
+                "work_in_progress": entry.work_in_progress,
+            }
+        )
 
     for tier, path in catalog_files.items():
         if not path.exists():
@@ -78,7 +81,9 @@ def read_catalog(catalog_files: dict[str, Path]) -> dict[str, list[dict]]:
         raw = data.get("modules")
         if raw is None:
             if "module" in data:
-                raise ValueError(f"{path.name}: use a `modules = [...]` array, not [[module]] tables")
+                raise ValueError(
+                    f"{path.name}: use a `modules = [...]` array, not [[module]] tables"
+                )
             raw = []
         if not isinstance(raw, list):
             raise ValueError(f"{path.name} must define a `modules` array")
@@ -90,7 +95,9 @@ def read_catalog(catalog_files: dict[str, Path]) -> dict[str, list[dict]]:
         if not isinstance(raw_tools, list):
             raise ValueError(f"{path.name} `tools` must be an array")
         if raw_tools and tier != "core":
-            raise ValueError(f"{path.name}: `tools` is only allowed in the core catalog")
+            raise ValueError(
+                f"{path.name}: `tools` is only allowed in the core catalog"
+            )
         for item in raw_tools:
             add(item, tier, path, tools)
 

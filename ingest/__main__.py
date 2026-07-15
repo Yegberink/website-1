@@ -10,6 +10,7 @@ Trust asymmetry: an invalid CORE module fails the build (governance); an invalid
 COMMUNITY module is skipped and reported. Core tool repos feed only the
 contributors view, so a fetch failure there is a warning, never fatal.
 """
+
 from __future__ import annotations
 
 import sys
@@ -58,7 +59,8 @@ def main() -> int:
             # them from the default branch (so credits added after a release still
             # show); a pinned entry reads everything, credits included, at its ref.
             contributors_json = (
-                files.get("contributors_json", "") if explicit_ref is not None
+                files.get("contributors_json", "")
+                if explicit_ref is not None
                 else files.get("contributors_json_head", "")
             )
             record = render.process_module(
@@ -78,7 +80,9 @@ def main() -> int:
                 work_in_progress=entry.get("work_in_progress", False),
             )
             if record["id"] in records:
-                raise ValueError(f"duplicate module id {record['id']!r} (also from another entry)")
+                raise ValueError(
+                    f"duplicate module id {record['id']!r} (also from another entry)"
+                )
             records[record["id"]] = record
         except Exception as exc:  # noqa: BLE001 - triage by tier
             if entry["tier"] == "core":
@@ -95,14 +99,21 @@ def main() -> int:
             # Tool repos feed only the contributors view; they get no release
             # resolution, so read from the pinned ref or default to `main`.
             data = fetch.fetch_repo_contributors(
-                entry["owner"], entry["name"], entry["ref"] or "main", entry.get("subdir")
+                entry["owner"],
+                entry["name"],
+                entry["ref"] or "main",
+                entry.get("subdir"),
             )
-            tool_sources.append({
-                "name": entry["name"],
-                "url": entry["repo"],
-                "description": data["description"][:300],
-                "contributors": render.parse_contributors(data["contributors_json"], source=entry["repo"]),
-            })
+            tool_sources.append(
+                {
+                    "name": entry["name"],
+                    "url": entry["repo"],
+                    "description": data["description"][:300],
+                    "contributors": render.parse_contributors(
+                        data["contributors_json"], source=entry["repo"]
+                    ),
+                }
+            )
         except Exception as exc:  # noqa: BLE001 - auxiliary, never fatal
             print(f"skip tool repo {entry['repo']}: {exc}", file=sys.stderr)
 
