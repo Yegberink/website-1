@@ -5,6 +5,7 @@ module only resolves a ref to a commit and fetches a module's README.md +
 INTERFACE.yaml in one query. Requires a GITHUB_TOKEN env var (the Actions token
 is fine for public repos; use a PAT for private ones; GraphQL always needs auth).
 """
+
 from __future__ import annotations
 
 import os
@@ -93,8 +94,7 @@ query($owner: String!, $name: String!, $ref: String!, $copier: String!,
 """
 
 
-def fetch_module_files(owner: str, name: str, ref: str,
-                       subdir: str | None) -> dict:
+def fetch_module_files(owner: str, name: str, ref: str, subdir: str | None) -> dict:
     """Resolve ref->sha and fetch a module's files in one query.
 
     .copier-answers.yml (identity/metadata) and INTERFACE.yaml are required;
@@ -108,16 +108,19 @@ def fetch_module_files(owner: str, name: str, ref: str,
     pass it back as `ref`. Caching by sha can also be added here.
     """
     base = f"{subdir.rstrip('/')}/" if subdir else ""
-    data = _graphql(_FILES_QUERY, {
-        "owner": owner,
-        "name": name,
-        "ref": ref,
-        "copier": f"{ref}:{base}.copier-answers.yml",
-        "readme": f"{ref}:{base}README.md",
-        "iface": f"{ref}:{base}INTERFACE.yaml",
-        "contrib": f"{ref}:{base}.all-contributorsrc",
-        "contribHead": f"HEAD:{base}.all-contributorsrc",
-    })
+    data = _graphql(
+        _FILES_QUERY,
+        {
+            "owner": owner,
+            "name": name,
+            "ref": ref,
+            "copier": f"{ref}:{base}.copier-answers.yml",
+            "readme": f"{ref}:{base}README.md",
+            "iface": f"{ref}:{base}INTERFACE.yaml",
+            "contrib": f"{ref}:{base}.all-contributorsrc",
+            "contribHead": f"HEAD:{base}.all-contributorsrc",
+        },
+    )
     repo = data["repository"]
     if repo is None:
         raise RuntimeError(f"repository {owner}/{name} not found")
@@ -142,7 +145,9 @@ def fetch_module_files(owner: str, name: str, ref: str,
         raise RuntimeError(".all-contributorsrc too large (truncated by API)")
     contrib_head = repo["contribHead"] or {}
     if contrib_head.get("isTruncated"):
-        raise RuntimeError(".all-contributorsrc (default branch) too large (truncated by API)")
+        raise RuntimeError(
+            ".all-contributorsrc (default branch) too large (truncated by API)"
+        )
     return {
         "sha": rev["oid"],
         "updated": rev["committedDate"],
@@ -164,16 +169,20 @@ query($owner: String!, $name: String!, $contrib: String!) {
 """
 
 
-def fetch_repo_contributors(owner: str, name: str, ref: str,
-                            subdir: str | None) -> dict:
+def fetch_repo_contributors(
+    owner: str, name: str, ref: str, subdir: str | None
+) -> dict:
     """Fetch a non-module repo's description + .all-contributorsrc (both may be
     absent). Used for core tool repos, which feed only the contributors view."""
     base = f"{subdir.rstrip('/')}/" if subdir else ""
-    data = _graphql(_REPO_QUERY, {
-        "owner": owner,
-        "name": name,
-        "contrib": f"{ref}:{base}.all-contributorsrc",
-    })
+    data = _graphql(
+        _REPO_QUERY,
+        {
+            "owner": owner,
+            "name": name,
+            "contrib": f"{ref}:{base}.all-contributorsrc",
+        },
+    )
     repo = data["repository"]
     if repo is None:
         raise RuntimeError(f"repository {owner}/{name} not found")

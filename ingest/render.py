@@ -5,6 +5,7 @@ might control (INTERFACE.yaml, README.md) is parsed and neutralised here, and
 nothing downstream (Hugo) ever reasons about trust again. Unit-test this module
 against a folder of deliberately malicious fixtures.
 """
+
 from __future__ import annotations
 
 import html
@@ -72,12 +73,40 @@ _md = MarkdownIt(
 )
 
 _ALLOWED_TAGS = {
-    "h1", "h2", "h3", "h4", "h5", "h6",
-    "p", "blockquote", "pre", "code", "span", "div", "br", "hr",
-    "ul", "ol", "li",
-    "strong", "em", "del", "sub", "sup", "kbd", "samp", "var",
-    "a", "img",
-    "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "p",
+    "blockquote",
+    "pre",
+    "code",
+    "span",
+    "div",
+    "br",
+    "hr",
+    "ul",
+    "ol",
+    "li",
+    "strong",
+    "em",
+    "del",
+    "sub",
+    "sup",
+    "kbd",
+    "samp",
+    "var",
+    "a",
+    "img",
+    "table",
+    "thead",
+    "tbody",
+    "tfoot",
+    "tr",
+    "th",
+    "td",
 }
 
 _ALLOWED_ATTRS = {
@@ -104,7 +133,7 @@ def extract_intro(markdown_text: str) -> str:
     # Drop a single leading H1 title (skip any blank lines before it).
     start = next((i for i, ln in enumerate(intro) if ln.strip()), len(intro))
     if start < len(intro) and _LEADING_H1_RE.match(intro[start]):
-        intro = intro[start + 1:]
+        intro = intro[start + 1 :]
 
     return "\n".join(intro).strip()
 
@@ -113,12 +142,16 @@ def extract_intro(markdown_text: str) -> str:
 # README references (e.g. ./figures/x.png) actually load on the directory site.
 # Done BEFORE nh3 so it only ever sees absolute https URLs (which pass the scheme
 # allow-list); absolute URLs are left untouched by urljoin.
-_IMG_SRC_RE = re.compile(r'(<img\b[^>]*?\bsrc=)(["\'])(.*?)\2', re.IGNORECASE | re.DOTALL)
+_IMG_SRC_RE = re.compile(
+    r'(<img\b[^>]*?\bsrc=)(["\'])(.*?)\2', re.IGNORECASE | re.DOTALL
+)
 
 
 def _absolutize_images(raw_html: str, base_url: str) -> str:
     return _IMG_SRC_RE.sub(
-        lambda m: f"{m.group(1)}{m.group(2)}{urljoin(base_url, m.group(3))}{m.group(2)}",
+        lambda m: (
+            f"{m.group(1)}{m.group(2)}{urljoin(base_url, m.group(3))}{m.group(2)}"
+        ),
         raw_html,
     )
 
@@ -156,11 +189,13 @@ def highlight_path(default: str, wildcards: dict[str, str]) -> str:
     out: list[str] = []
     last = 0
     for m in _WILDCARD_RE.finditer(default):
-        out.append(html.escape(default[last:m.start()]))
+        out.append(html.escape(default[last : m.start()]))
         token = html.escape(m.group(0))
         desc = wildcards.get(m.group(1))
         if desc is not None:
-            out.append(f'<span class="wc" title="{html.escape(desc, quote=True)}">{token}</span>')
+            out.append(
+                f'<span class="wc" title="{html.escape(desc, quote=True)}">{token}</span>'
+            )
         else:
             out.append(token)
         last = m.end()
@@ -177,6 +212,7 @@ def parse_contributors(rc_json: str, source: str = "") -> list[dict[str, Any]]:
     not break a build. Discards are logged to stderr (tagged with `source`) so a
     typo can't silently drop everyone without a trace.
     """
+
     def warn(msg: str) -> None:
         where = f" for {source}" if source else ""
         print(f"warn: .all-contributorsrc{where}: {msg}", file=sys.stderr)
@@ -193,7 +229,8 @@ def parse_contributors(rc_json: str, source: str = "") -> list[dict[str, Any]]:
         return []
     sort_alphabetically = (
         data.get("contributorsSortAlphabetically") is True
-        if isinstance(data, dict) else False
+        if isinstance(data, dict)
+        else False
     )
     raw = data.get("contributors") if isinstance(data, dict) else None
     if not isinstance(raw, list):
@@ -208,16 +245,20 @@ def parse_contributors(rc_json: str, source: str = "") -> list[dict[str, Any]]:
         except ValidationError:
             skipped += 1
             continue  # skip a bad entry, keep the rest
-        out.append({
-            "login": c.login,
-            "name": c.name or c.login,
-            "avatar_url": str(c.avatar_url) if c.avatar_url else None,
-            "profile": str(c.profile) if c.profile else None,
-            "contributions": c.contributions,
-        })
+        out.append(
+            {
+                "login": c.login,
+                "name": c.name or c.login,
+                "avatar_url": str(c.avatar_url) if c.avatar_url else None,
+                "profile": str(c.profile) if c.profile else None,
+                "contributions": c.contributions,
+            }
+        )
     if skipped:
-        warn(f"skipped {skipped} invalid contributor "
-             f"{'entry' if skipped == 1 else 'entries'}")
+        warn(
+            f"skipped {skipped} invalid contributor "
+            f"{'entry' if skipped == 1 else 'entries'}"
+        )
     if sort_alphabetically:
         out.sort(
             key=lambda c: (
@@ -248,9 +289,13 @@ def aggregate_contributors(
         agg = merged.get(key)
         if agg is None:
             agg = merged[key] = {
-                "login": c["login"], "name": c["name"],
-                "avatar_url": c["avatar_url"], "profile": c["profile"],
-                "contributions": set(), "modules": set(), "tools": {},
+                "login": c["login"],
+                "name": c["name"],
+                "avatar_url": c["avatar_url"],
+                "profile": c["profile"],
+                "contributions": set(),
+                "modules": set(),
+                "tools": {},
             }
         agg["contributions"].update(c["contributions"])
         agg["avatar_url"] = agg["avatar_url"] or c["avatar_url"]
@@ -267,15 +312,21 @@ def aggregate_contributors(
 
     result = []
     for v in merged.values():
-        tools = sorted(({"name": n, "url": u} for u, n in v["tools"].items()),
-                       key=lambda t: t["name"])
-        result.append({
-            **v,
-            "contributions": sorted(v["contributions"]),
-            "modules": sorted(v["modules"]),
-            "tools": tools,
-        })
-    result.sort(key=lambda c: (-(len(c["modules"]) + len(c["tools"])), c["login"].lower()))
+        tools = sorted(
+            ({"name": n, "url": u} for u, n in v["tools"].items()),
+            key=lambda t: t["name"],
+        )
+        result.append(
+            {
+                **v,
+                "contributions": sorted(v["contributions"]),
+                "modules": sorted(v["modules"]),
+                "tools": tools,
+            }
+        )
+    result.sort(
+        key=lambda c: (-(len(c["modules"]) + len(c["tools"])), c["login"].lower())
+    )
     return result
 
 
@@ -335,7 +386,9 @@ def process_module(
         "license": copier.license,
         "authors": copier.author_names,
         "maintainers": copier.maintainer_names,
-        "description_html": render_readme(extract_intro(readme_md), image_base_url=image_base),
+        "description_html": render_readme(
+            extract_intro(readme_md), image_base_url=image_base
+        ),
         "pathvars": pathvars,
         "wildcards": wildcards,
         "convention_version": cv,
@@ -356,9 +409,7 @@ def write_dataset(records: dict[str, dict], data_dir: Path) -> None:
     """Write data/modules.json — the file the Hugo content adapter consumes."""
     out = data_dir / "modules.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(
-        json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    out.write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def write_contributors(contributors: list[dict], data_dir: Path) -> None:
@@ -389,7 +440,9 @@ def _highlight_defs(style: str, selector: str) -> str:
 def write_highlight_css(path: Path) -> None:
     """Emit the Pygments stylesheet (light + dark token colors)"""
     light = _highlight_defs(_LIGHT_HL_STYLE, ".highlight")
-    dark_media = _highlight_defs(_DARK_HL_STYLE, ":root:not([data-theme='light']) .highlight")
+    dark_media = _highlight_defs(
+        _DARK_HL_STYLE, ":root:not([data-theme='light']) .highlight"
+    )
     dark_attr = _highlight_defs(_DARK_HL_STYLE, "[data-theme='dark'] .highlight")
     css = (
         f"{light}\n\n"
