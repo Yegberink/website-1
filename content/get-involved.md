@@ -4,9 +4,13 @@ title: Get involved
 
 ModelBlocks is an open project and your contributions are welcome.
 
+## Chat
+
+Join the discussion on our [Zulip chat]({{< param zulip_url >}}) to ask questions, propose modules, and coordinate work.
+
 ## Governance
 
-Will be added shortly - stay tuned.
+See [our goverance](https://github.com/modelblocks-org/.github/blob/main/GOVERNANCE.md) on GitHub, and our [code of conduct](https://github.com/modelblocks-org/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## Add a community module
 
@@ -26,10 +30,6 @@ Community modules are marked as such in the directory.
 
 Each module repo tracks its own contributors with [all-contributors](https://allcontributors.org/).
 Add yourself (or others) in your module repo and you'll appear on the project-wide [contributors page](/contributors/), flagged with every module you've contributed to.
-
-## Chat
-
-Join the discussion on our [Zulip chat]({{< param zulip_url >}}) to ask questions, propose modules, and coordinate work.
 
 ## Code & docs
 
